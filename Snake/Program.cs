@@ -17,6 +17,7 @@ namespace Snake
         {
             public char[,] matrix;
             public Coor head;
+            public Coor tail;
             public Coor direction;
             public int points;
         }
@@ -25,11 +26,20 @@ namespace Snake
             State gameState = new State();
 
             Console.Write("Game size (suggested 25): ");
-            int size = int.Parse(Console.ReadLine());
+            int size = int.Parse(Console.ReadLine()), waitTime = 200;
             gameState.matrix = new char[size+2,size+2];
 
+            //Game initialization
             Initialize(ref gameState);
             Render(gameState);
+
+            char input = ' ';
+            //Main game loop
+            while(input != 'q')
+            {
+                input = ReadInput();
+                System.Threading.Thread.Sleep(waitTime); //Wait time between game loops
+            }
         }
 
 
@@ -49,7 +59,9 @@ namespace Snake
             }
             //Sets the player position to the middle of the screen and its direction to the right
             state.head = new Coor { x = sideLength / 2, y = sideLength / 2 };
+            state.tail = new Coor { x = sideLength / 2 - 1, y = sideLength / 2 - 1 };
             state.matrix[state.head.x, state.head.y] = 's';
+            state.matrix[state.tail.x, state.tail.y] = 's';
             state.direction = new Coor { x = 0, y = 1 };
             state.points = 0;
         }
@@ -76,6 +88,25 @@ namespace Snake
             //Points
             Console.BackgroundColor = ConsoleColor.Black;
             Console.WriteLine("Points: {0}", state.points);
+        }
+
+        static char ReadInput()
+        {
+            char k = ' ';
+            if (Console.KeyAvailable)
+            {
+                string key = Console.ReadKey(true).Key.ToString();
+                switch (key)
+                {
+                    case "Escape": k = 'q'; break;
+                    case "UpArrow": k = 'u'; break;
+                    case "DownArrow": k = 'd'; break;
+                    case "LeftArrow": k = 'l'; break;
+                    case "RightArrow": k = 'r'; break;
+                }
+            }
+            while (Console.KeyAvailable) Console.ReadKey().Key.ToString();
+            return k;
         }
     }
 }
