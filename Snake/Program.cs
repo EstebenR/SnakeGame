@@ -24,11 +24,12 @@ namespace Snake
         {
             State gameState = new State();
 
-            Console.Write("Game size: ");
+            Console.Write("Game size (suggested 25): ");
             int size = int.Parse(Console.ReadLine());
             gameState.matrix = new char[size+2,size+2];
 
             Initialize(ref gameState);
+            Render(gameState);
         }
 
 
@@ -51,6 +52,30 @@ namespace Snake
             state.matrix[state.head.x, state.head.y] = 's';
             state.direction = new Coor { x = 0, y = 1 };
             state.points = 0;
+        }
+
+        static void Render(State state)
+        {
+            Console.Clear();
+            //Draws the stage
+            for(int i = 0; i < state.matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < state.matrix.GetLength(0); j++)
+                {
+                    switch (state.matrix[i, j])
+                    {
+                        case '#': Console.BackgroundColor = ConsoleColor.White; break;
+                        case '.': Console.BackgroundColor = ConsoleColor.Black; break;
+                        case 's': Console.BackgroundColor = ConsoleColor.Green; break;
+                        case 'a': Console.BackgroundColor = ConsoleColor.Red; break;
+                    }
+                    Console.Write("  ");
+                }
+                Console.WriteLine();
+            }
+            //Points
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.WriteLine("Points: {0}", state.points);
         }
     }
 }
