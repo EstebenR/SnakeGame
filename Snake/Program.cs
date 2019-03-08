@@ -59,7 +59,7 @@ namespace Snake
             }
             //Sets the player position to the middle of the screen and its direction to the right
             state.head = new Coor { x = sideLength / 2, y = sideLength / 2 };
-            state.tail = new Coor { x = sideLength / 2 - 1, y = sideLength / 2 - 1 };
+            state.tail = new Coor { x = sideLength / 2, y = sideLength / 2 - 1 };
             state.matrix[state.head.x, state.head.y] = 's';
             state.matrix[state.tail.x, state.tail.y] = 's';
             state.direction = new Coor { x = 0, y = 1 };
