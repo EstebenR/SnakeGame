@@ -24,6 +24,7 @@ namespace Snake
         static void Main(string[] args)
         {
             State gameState = new State();
+            bool collided = false;
 
             Console.Write("Game size (suggested 25): ");
             int size = int.Parse(Console.ReadLine()), waitTime = 200;
@@ -35,10 +36,15 @@ namespace Snake
 
             char input = ' ';
             //Main game loop
-            while(input != 'q')
+            while(input != 'q' && !collided)
             {
                 input = ReadInput();
-                ProcessInput(input, ref gameState);
+                if( input != 'q')
+                {
+                    ProcessInput(input, ref gameState);
+                    AdvanceSnake(ref gameState, ref collided);
+                    Render(gameState);
+                }
                 System.Threading.Thread.Sleep(waitTime); //Wait time between game loops
             }
         }
@@ -120,6 +126,24 @@ namespace Snake
                 case 'r': state.direction = new Coor { x = 0, y = 1 }; break;
                 default: break;
             }
+        }
+
+        static void AdvanceSnake(ref State state, ref bool collision)
+        {
+            char nextTileValue = state.matrix[state.head.x + state.direction.x, state.head.y + state.direction.y];
+
+            state.head = new Coor { x = state.head.x + state.direction.x, y = state.head.y + state.direction.y };
+            state.matrix[state.head.x,state.head.y] = 's'; //Advances the head in the direction chosen
+
+            if (nextTileValue != 'a')//If the snake didn't grow
+            {
+                state.matrix[state.tail.x, state.tail.y] = '.';
+                //state.tail = state.tail;
+                if (nextTileValue == '#') //If player died
+                    collision = true;
+            }
+            else //Player ate an apple and grew
+                state.points++;
         }
     }
 }
