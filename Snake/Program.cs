@@ -38,6 +38,7 @@ namespace Snake
             while(input != 'q')
             {
                 input = ReadInput();
+                ProcessInput(input, ref gameState);
                 System.Threading.Thread.Sleep(waitTime); //Wait time between game loops
             }
         }
@@ -107,6 +108,18 @@ namespace Snake
             }
             while (Console.KeyAvailable) Console.ReadKey().Key.ToString();
             return k;
+        }
+
+        static void ProcessInput(char input, ref State state)
+        {
+            switch (input)
+            {
+                case 'u': state.direction = new Coor { x = -1, y = 0 }; break;
+                case 'd': state.direction = new Coor { x = 1, y = 0 }; break;
+                case 'l': state.direction = new Coor { x = 0, y = -1 }; break;
+                case 'r': state.direction = new Coor { x = 0, y = 1 }; break;
+                default: break;
+            }
         }
     }
 }
